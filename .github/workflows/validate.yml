@@ -1,0 +1,40 @@
+name: Validate
+# Lints skills and evals, checks plugin.json files and the catalog, and checks remote pins. Never calls a model.
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run lint
+        env:
+          VALLY_TELEMETRY_OPTOUT: '1'
+      - name: Test CI checks and local-install recipes
+        run: node --test .github/scripts/*.test.mjs
+      - name: Validate plugin.json files against the Agent Plugins schema
+        run: bash .github/scripts/validate-schema.sh
+      # Vally doesn't read marketplace.json, so match each local entry to its plugin.json.
+      - name: Check local catalog entries
+        run: node .github/scripts/check-local-catalog.mjs
+      # Remote entries pin a real commit with the matching name and optional version. A private repo needs a readable token.
+      - name: Check remote pins
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node .github/scripts/check-remote-pins.mjs
