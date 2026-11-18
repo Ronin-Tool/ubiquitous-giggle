@@ -1,0 +1,20 @@
+# Vally configuration for the included plugins' evals.
+paths:
+  # evals/ mirrors plugins/: one eval per skill or agent, such as
+  # evals/<plugin>/skills/<skill>/eval.yaml.
+  evals:
+    - evals
+  evalFilenames:
+    - eval.yaml
+    - "*.eval.yaml"
+  results: vally-results
+suites:
+  smoke:
+    description: One representative case for each skill and agent
+    filter:
+      suite: smoke
+  full:
+    description: Every case
+    evals:
+      - evals/**/eval.yaml
+      - evals/**/*.eval.yaml
