@@ -1,0 +1,18 @@
+{
+  "name": "plugin-marketplace-starter",
+  "private": true,
+  "version": "1.0.0",
+  "license": "MIT",
+  "engines": { "node": ">=22.15.0" },
+  "scripts": {
+    "lint": "node .github/scripts/lint.mjs",
+    "eval": "vally eval --workers 1 --max-retries 1",
+    "eval:models": "vally experiment run evals/standard-models.experiment.yaml --output-dir evals/results/standard-models --require-pass",
+    "eval:serve": "vally serve evals/results",
+    "eval:compare": "vally compare"
+  },
+  "devDependencies": {
+    "@github/copilot": "1.0.98",
+    "@microsoft/vally-cli": "0.21.0"
+  }
+}
