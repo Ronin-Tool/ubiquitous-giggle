@@ -1,0 +1,30 @@
+name: Evals
+# Runs the smoke evals with real Copilot sessions, which cost AI credits.
+# Start by explicit manual dispatch only; pull requests never start paid runs.
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  evals:
+    runs-on: ubuntu-latest
+    environment: evals
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      copilot-requests: write
+    env:
+      VALLY_TELEMETRY_OPTOUT: '1'
+      COPILOT_CLI_PATH: ${{ github.workspace }}/node_modules/@github/copilot/npm-loader.js
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --no-audit --no-fund
+      - run: npm run eval -- --suite smoke --require-pass
+        env:
+          GITHUB_TOKEN: ${{ github.token }}

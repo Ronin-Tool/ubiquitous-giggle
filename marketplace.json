@@ -1,0 +1,39 @@
+{
+  "name": "plugin-marketplace-starter",
+  "owner": {
+    "name": "GitHub"
+  },
+  "plugins": [
+    {
+      "name": "plugin-authoring",
+      "source": "./plugins/plugin-authoring",
+      "version": "0.1.0",
+      "description": "Scaffold, try locally, and prepare contributions to this plugin marketplace."
+    },
+    {
+      "name": "marketplace-maintainer",
+      "source": "./plugins/marketplace-maintainer",
+      "version": "0.2.0",
+      "description": "Review contributed plugins, maintain remote pins, and prepare marketplace releases."
+    },
+    {
+      "name": "pr-description",
+      "source": "./plugins/pr-description",
+      "version": "0.1.0",
+      "description": "Draft structured pull request descriptions from supplied change notes or diffs without inventing unshipped work."
+    },
+    {
+      "name": "eval",
+      "source": {
+        "source": "github",
+        "repo": "github/evals",
+        "path": "packages/plugin",
+        "ref": "copilot-evals-v0.24.0",
+        "sha": "34ddb5803aeaee8330ab70c19ad1a3f37fb77ded"
+      },
+      "version": "0.24.0",
+      "description": "GitHub Copilot Evals (Preview): set up a project with /eval setup, create and save evals with /eval create, save revised copies with /eval improve, run with /eval run, review with /eval review, and compare saved runs or explore one skill with /eval compare. Setup is optional; saves use normal host permissions and runs require cost/effect approval.",
+      "homepage": "https://github.com/github/evals"
+    }
+  ]
+}
